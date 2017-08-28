@@ -26,9 +26,10 @@ public class SeattleApplication extends Application {
 		fxmlLoader.setControllerFactory(springContext::getBean);
 		root = fxmlLoader.load();
 
-		URL paneOneUrl = getClass().getResource("/fxml/MainView.fxml");
 //		AnchorPane mainView = FXMLLoader.load( paneOneUrl );
-		AnchorPane mainView = new FXMLLoader(paneOneUrl).load();
+		FXMLLoader subLoader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+		subLoader.setControllerFactory(springContext::getBean);
+		AnchorPane mainView = subLoader.load();
 		root.setCenter(mainView);
 		root.setAlignment(mainView, Pos.CENTER);
 	}

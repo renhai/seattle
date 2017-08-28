@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,15 +20,19 @@ import java.io.IOException;
 @Slf4j
 public class RootLayoutController {
 
+    @Autowired
+    private ApplicationContext context;
+
     @FXML
     public BorderPane root;
 
     @FXML
     public void onManageClick(ActionEvent actionEvent) {
         try {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+            loader.setControllerFactory(context::getBean);
             AnchorPane childView = loader.load();
-            MainViewController controller = loader.getController();
             root.setCenter(childView);
             root.setAlignment(childView, Pos.CENTER);
         } catch (IOException e) {
@@ -38,6 +44,7 @@ public class RootLayoutController {
     public void onClickUpload(ActionEvent actionEvent) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UploadView.fxml"));
+            loader.setControllerFactory(context::getBean);
             AnchorPane childView = loader.load();
             root.setCenter(childView);
             root.setAlignment(childView, Pos.CENTER);
