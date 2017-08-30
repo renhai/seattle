@@ -150,4 +150,11 @@ public class TesterService {
             testerRepository.delete(id);
         }
     }
+
+    @Transactional
+    public TesterDto createTester(Tester tester) {
+        Tester entity = testerRepository.save(tester);
+        return new TesterDto(entity);
+    }
+
 }

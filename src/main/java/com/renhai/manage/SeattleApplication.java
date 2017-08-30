@@ -12,12 +12,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.net.URL;
+import java.util.Locale;
 
 @SpringBootApplication
 public class SeattleApplication extends Application {
 	private ConfigurableApplicationContext springContext;
 //	private Parent root;
 	private BorderPane root;
+	public static Stage primaryStage;
 
 	@Override
 	public void init() throws Exception {
@@ -36,6 +38,8 @@ public class SeattleApplication extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		Locale.setDefault(Locale.CHINA);
+		SeattleApplication.primaryStage = primaryStage;
 		primaryStage.setTitle("管理");
 		Scene scene = new Scene(root, 800, 600);
 		primaryStage.setScene(scene);

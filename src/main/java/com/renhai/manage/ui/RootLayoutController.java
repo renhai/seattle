@@ -29,7 +29,6 @@ public class RootLayoutController {
     @FXML
     public void onManageClick(ActionEvent actionEvent) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
             loader.setControllerFactory(context::getBean);
             AnchorPane childView = loader.load();

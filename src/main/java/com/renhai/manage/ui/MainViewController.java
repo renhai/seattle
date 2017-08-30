@@ -1,21 +1,30 @@
 package com.renhai.manage.ui;
 
+import com.renhai.manage.SeattleApplication;
 import com.renhai.manage.dto.ColumnEnum;
 import com.renhai.manage.dto.TesterDto;
 import com.renhai.manage.service.TesterService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ChoiceBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,13 +39,18 @@ public class MainViewController {
     @Autowired
     private TesterService testerService;
 
+    @Autowired
+    private ApplicationContext context;
+
+    private ObservableList<TesterDto> data = FXCollections.observableArrayList();
+
     @FXML
     public TableView<TesterDto> dataTable;
 
     @FXML
     public void initialize() {
-
-        dataTable.setItems(getData());
+        initData();
+        dataTable.setItems(this.data);
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         ContextMenu menu = new ContextMenu();
@@ -101,10 +115,34 @@ public class MainViewController {
 
     }
 
-    private ObservableList<TesterDto> getData() {
-        ObservableList<TesterDto> result = FXCollections.observableArrayList();
-        List<TesterDto> data = testerService.getAllTesters();
-        result.addAll(data);
-        return result;
+    private void initData() {
+        data.clear();
+        List<TesterDto> result = testerService.getAllTesters();
+        data.addAll(result);
+    }
+
+    public void onClickAdd(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TesterAddDialog.fxml"));
+            loader.setControllerFactory(context::getBean);
+            ScrollPane page = loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("添加");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(SeattleApplication.primaryStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            TesterAddDialogController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+
+            dialogStage.showAndWait();
+
+            if (controller.isSaveBtnClicked()) {
+                this.data.add(controller.getTesterDto());
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 }

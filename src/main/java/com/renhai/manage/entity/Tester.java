@@ -4,7 +4,10 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by hai on 6/26/17.
@@ -127,6 +130,10 @@ public class Tester {
 			}
 			return null;
 		}
+
+		public static List<String> getTextList() {
+			return Arrays.stream(Gender.values()).map(en -> en.getText()).collect(Collectors.toList());
+		}
 	}
 
 	public enum Level {
@@ -145,6 +152,10 @@ public class Tester {
 				}
 			}
 			return null;
+		}
+
+		public static List<String> getTextList() {
+			return Arrays.stream(Level.values()).map(en -> en.getText()).collect(Collectors.toList());
 		}
 	}
 
@@ -165,6 +176,10 @@ public class Tester {
 			}
 			return null;
 		}
+
+		public static List<String> getTextList() {
+			return Arrays.stream(Grade.values()).map(en -> en.getText()).collect(Collectors.toList());
+		}
 	}
 
 	public enum Status {
@@ -183,6 +198,10 @@ public class Tester {
 				}
 			}
 			return null;
+		}
+
+		public static List<String> getTextList() {
+			return Arrays.stream(Status.values()).map(en -> en.getText()).collect(Collectors.toList());
 		}
 	}
 }
