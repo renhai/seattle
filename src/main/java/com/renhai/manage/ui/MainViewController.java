@@ -3,10 +3,12 @@ package com.renhai.manage.ui;
 import com.renhai.manage.SeattleApplication;
 import com.renhai.manage.dto.ColumnEnum;
 import com.renhai.manage.dto.TesterDto;
+import com.renhai.manage.entity.Tester;
 import com.renhai.manage.service.TesterService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.DateStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,55 +60,55 @@ public class MainViewController {
         MenuItem removeMenuItem = new MenuItem("Remove");
         menu.getItems().add(removeMenuItem);
         dataTable.setContextMenu(menu);
-        removeMenuItem.setOnAction(event -> {
-            ObservableList<TesterDto> selectedRows = dataTable.getSelectionModel().getSelectedItems();
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("确认");
-            String s = String.format("确认删除这%d行吗？", selectedRows.size());
-            alert.setHeaderText(s);
-
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-                List<Integer> idList = selectedRows.stream().map(dto -> dto.getId()).collect(Collectors.toList());
-                testerService.deleteTesters(idList);
-                dataTable.getItems().removeAll(selectedRows);
-                dataTable.refresh();
-            }
-        });
+        removeMenuItem.setOnAction(event -> this.removeItems());
 
         for (ColumnEnum columnEnum : ColumnEnum.values()) {
             TableColumn column = new TableColumn<>(columnEnum.getDisplayName());
             column.setCellValueFactory(new PropertyValueFactory(columnEnum.name()));
-            column.setOnEditCommit(event -> {
-                TableColumn.CellEditEvent cellEditEvent = (TableColumn.CellEditEvent) event;
-                int position = cellEditEvent.getTablePosition().getRow();
-                TesterDto dto = dataTable.getItems().get(position);
-                String fieldName = columnEnum.name();
-                try {
-                    TesterDto newDto = testerService.updateTester(dto.getId(), fieldName, cellEditEvent.getNewValue());
-                    dataTable.getItems().set(position, newDto);
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                }
-            });
+            column.setOnEditCommit(event -> this.updateField(columnEnum, event));
 
             switch (columnEnum) {
+                case id:
+                case age:
+                    break;
                 case gender: {
-                    ObservableList<String> genderList = FXCollections.observableArrayList("男", "女");
+                    ObservableList<String> genderList = FXCollections.observableArrayList(Tester.Gender.getTextList());
                     column.setCellFactory(ChoiceBoxTableCell.forTableColumn(genderList));
                     break;
                 }
+                case level: {
+                    ObservableList<String> genderList = FXCollections.observableArrayList(Tester.Level.getTextList());
+                    column.setCellFactory(ChoiceBoxTableCell.forTableColumn(genderList));
+                    break;
+                }
+                case grade: {
+                    ObservableList<String> genderList = FXCollections.observableArrayList(Tester.Grade.getTextList());
+                    column.setCellFactory(ChoiceBoxTableCell.forTableColumn(genderList));
+                    break;
+                }
+                case status: {
+                    ObservableList<String> genderList = FXCollections.observableArrayList(Tester.Status.getTextList());
+                    column.setCellFactory(ChoiceBoxTableCell.forTableColumn(genderList));
+                    break;
+                }
+                case dob:
                 case cnTestDate: {
                     column.setCellFactory(TextFieldTableCell.forTableColumn(new DateStringConverter("yyyy-MM-dd")));
                     break;
                 }
+                case testCount:
+                case score:
+                case termNo:
                 case trainingYear: {
                     column.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
                     break;
                 }
+                case cnScore: {
+                    column.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+                    break;
+                }
                 default: {
-//                    column.setCellFactory(TextFieldTableCell.forTableColumn());
+                    column.setCellFactory(TextFieldTableCell.forTableColumn());
                     break;
                 }
             }
@@ -142,6 +145,36 @@ public class MainViewController {
                 this.data.add(controller.getTesterDto());
             }
         } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private void removeItems() {
+        ObservableList<TesterDto> selectedRows = dataTable.getSelectionModel().getSelectedItems();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("确认");
+        String s = String.format("确认删除这%d行吗？", selectedRows.size());
+        alert.setHeaderText(s);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+            List<Integer> idList = selectedRows.stream().map(dto -> dto.getId()).collect(Collectors.toList());
+            testerService.deleteTesters(idList);
+            dataTable.getItems().removeAll(selectedRows);
+            dataTable.refresh();
+        }
+    }
+
+    private void updateField(ColumnEnum columnEnum, Event event) {
+        TableColumn.CellEditEvent cellEditEvent = (TableColumn.CellEditEvent) event;
+        int position = cellEditEvent.getTablePosition().getRow();
+        TesterDto dto = dataTable.getItems().get(position);
+        String fieldName = columnEnum.name();
+        try {
+            TesterDto newDto = testerService.updateTester(dto.getId(), fieldName, cellEditEvent.getNewValue());
+            dataTable.getItems().set(position, newDto);
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }

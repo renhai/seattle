@@ -92,9 +92,6 @@ public class TesterDto {
         return tester.getDialect();
     }
 
-//    public String getCnTestDate() {
-//        return tester.getCnTestDate() == null ? "" : DEFAULT_DATE_FORMAT.format(tester.getCnTestDate());
-//    }
     public Date getCnTestDate() {
         return tester.getCnTestDate();
     }
@@ -119,8 +116,8 @@ public class TesterDto {
         return tester.getBankAccount();
     }
 
-    public String getDob() {
-        return tester.getDob() == null ? "" : DEFAULT_DATE_FORMAT.format(tester.getDob());
+    public Date getDob() {
+        return tester.getDob();
     }
 
     public Integer getAge() {
