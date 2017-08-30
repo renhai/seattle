@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.renhai.manage.ui.UploadViewController">
    <children>
-      <Button layoutX="245.0" layoutY="146.0" mnemonicParsing="false" onAction="#onClickUpload" text="Choose a file..." />
+      <HBox alignment="CENTER_LEFT" layoutX="61.0" layoutY="14.0" prefHeight="65.0" prefWidth="479.0" spacing="2.0">
+         <children>
+            <TextField fx:id="fileNameField" editable="false" prefHeight="27.0" prefWidth="347.0" />
+            <Button mnemonicParsing="false" onAction="#onClickBrowse" text="Browse" />
+            <Button mnemonicParsing="false" onAction="#onClickUpload" text="Upload" />
+         </children>
+      </HBox>
+      <GridPane fx:id="uploadResultTable" layoutX="61.0" layoutY="97.0" prefHeight="171.0" prefWidth="347.0" visible="false">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="105.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="242.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="157.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="214.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="上传成功" />
+            <Label text="上传失败" GridPane.rowIndex="1" />
+            <Label text="失败信息" GridPane.rowIndex="2" />
+            <Text fx:id="successLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="24" GridPane.columnIndex="1" />
+            <Text fx:id="failedLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="211" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea fx:id="failedDetail" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>

@@ -7,14 +7,12 @@
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.renhai.manage.ui.MainViewController">
    <children>
       <TableView fx:id="dataTable" editable="true" layoutX="141.0" layoutY="44.0" prefHeight="356.0" prefWidth="600.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="44.0" />
-      <HBox alignment="CENTER_LEFT" layoutX="13.0" layoutY="11.0" prefHeight="27.0" prefWidth="163.0">
+      <HBox alignment="CENTER_LEFT" layoutX="13.0" layoutY="11.0" prefHeight="27.0" prefWidth="511.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onClickAdd" prefHeight="21.0" prefWidth="47.0" text="Add" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="306.0" layoutY="11.0" prefHeight="27.0" prefWidth="280.0">
-         <children>
-            <TextField fx:id="filterField" prefHeight="27.0" prefWidth="209.0" />
+            <Button mnemonicParsing="false" onAction="#onClickAdd" prefHeight="21.0" prefWidth="47.0" text="添加" />
+            <Button mnemonicParsing="false" text="上传" />
+            <Button mnemonicParsing="false" text="下载" />
+            <TextField fx:id="filterField" prefHeight="27.0" prefWidth="298.0" promptText="搜索" />
          </children>
       </HBox>
    </children>

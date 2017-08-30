@@ -21,12 +21,6 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem fx:id="uploadMenuItem" mnemonicParsing="false" onAction="#onClickUpload" text="Upload" />
-                  <MenuItem mnemonicParsing="false" text="Download" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Settings">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Customize Columns" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
