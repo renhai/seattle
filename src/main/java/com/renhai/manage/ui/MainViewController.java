@@ -72,7 +72,6 @@ public class MainViewController {
     @FXML
     public void initialize() {
         initData();
-//        dataTable.setItems(this.data);
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         ContextMenu menu = new ContextMenu();
@@ -86,27 +85,31 @@ public class MainViewController {
             dataTable.getColumns().addAll(column);
         }
 
+        setUpFilter();
+    }
+
+    private void setUpFilter() {
         FilteredList<TesterDto> filteredData = new FilteredList<>(this.data, p -> true);
 
         filterField.textProperty().addListener((observable, oldValue, newValue) -> filteredData.setPredicate(dto -> {
-			if (StringUtils.isBlank(newValue)) {
-				return true;
-			}
+            if (StringUtils.isBlank(newValue)) {
+                return true;
+            }
 
-			String lowerCaseFilter = newValue.toLowerCase();
-			for (ColumnEnum columnEnum : ColumnEnum.values()) {
-				try {
-					Object value  = MethodUtils.invokeMethod(dto, "get"+ StringUtils.capitalize(columnEnum.name()));
-					if (value != null && value.toString().contains(lowerCaseFilter)) {
-						return true;
-					}
-				} catch (Exception e) {
-					log.error(e.getMessage(), e);
-				}
+            String lowerCaseFilter = newValue.toLowerCase();
+            for (ColumnEnum columnEnum : ColumnEnum.values()) {
+                try {
+                    Object value  = MethodUtils.invokeMethod(dto, "get"+ StringUtils.capitalize(columnEnum.name()));
+                    if (value != null && value.toString().contains(lowerCaseFilter)) {
+                        return true;
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
 
-			}
-			return false;
-		}));
+            }
+            return false;
+        }));
         SortedList<TesterDto> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(dataTable.comparatorProperty());
         dataTable.setItems(sortedData);
@@ -226,11 +229,6 @@ public class MainViewController {
             }
         }
         return column;
-    }
-
-    @FXML
-    public void handleUpload(ActionEvent actionEvent) {
-
     }
 
     @FXML

@@ -110,33 +110,14 @@ public class TesterService {
 
     @Transactional
     public TesterDto updateTester(Integer id, String fieldName, Object value)
-            throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
-//        value = org.apache.commons.lang3.StringUtils.trim(value);
+        throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, ParseException {
         Tester tester = testerRepository.findOne(id);
         Field field = FieldUtils.getField(Tester.class, fieldName, true);
-//        if (org.apache.commons.lang3.StringUtils.isEmpty(value)) {
-//            FieldUtils.writeDeclaredField(tester, fieldName, null, true);
-//        } else
- if (field.getType().isEnum()) {
-            Object realValue = MethodUtils.invokeStaticMethod(field.getType(), "fromText", value);
-            if (realValue == null) {
-                throw new IllegalArgumentException("参数类型错误");
-            }
-            FieldUtils.writeDeclaredField(tester, fieldName, realValue, true);
-        }
-// else if (field.getType().equals(Integer.class)) {
-//            Integer realValue = Integer.parseInt(value);
-//            FieldUtils.writeDeclaredField(tester, fieldName, realValue, true);
-//        }
-// else if (field.getType().equals(Double.class)) {
-//            Double realValue = Double.parseDouble(value);
-//            FieldUtils.writeDeclaredField(tester, fieldName, realValue, true);
-//        } else if (field.getType().equals(Date.class)) {
-//            Date realValue = TesterDto.DEFAULT_DATE_FORMAT.parse(value);
-//            FieldUtils.writeDeclaredField(tester, fieldName, realValue, true);
-//        }
- else {
 
+        if (field.getType().isEnum()) {
+            Object realValue = MethodUtils.invokeStaticMethod(field.getType(), "fromText", value);
+            FieldUtils.writeDeclaredField(tester, fieldName, realValue, true);
+        } else {
             FieldUtils.writeDeclaredField(tester, fieldName, value, true);
         }
 

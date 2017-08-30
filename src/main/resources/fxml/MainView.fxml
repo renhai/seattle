@@ -10,7 +10,6 @@
       <HBox alignment="CENTER_LEFT" layoutX="13.0" layoutY="11.0" prefHeight="27.0" prefWidth="511.0" spacing="10.0">
          <children>
             <Button mnemonicParsing="false" onAction="#onClickAdd" prefHeight="21.0" prefWidth="47.0" text="添加" />
-            <Button mnemonicParsing="false" onAction="#handleUpload" text="导入" />
             <Button mnemonicParsing="false" onAction="#handleDownload" text="导出" />
             <TextField fx:id="filterField" prefHeight="27.0" prefWidth="298.0" promptText="搜索" />
          </children>
