@@ -1,5 +1,6 @@
 package com.renhai.manage.ui;
 
+import com.google.common.base.Preconditions;
 import com.renhai.manage.dto.ColumnEnum;
 import com.renhai.manage.dto.TesterDto;
 import com.renhai.manage.entity.Tester;
@@ -117,21 +118,14 @@ public class TesterAddDialogController {
 		addForm.add(box, 1, rowIndex);
 	}
 
-	private boolean isInputValidate() {
-		//TODO
-		return true;
+	private void checkInputField(Tester tester) {
+		Preconditions.checkArgument(StringUtils.isNotBlank(tester.getName()), "请输入姓名");
+		Preconditions.checkArgument(StringUtils.isNotBlank(tester.getAccount()), "请输入账号");
+		Preconditions.checkArgument(StringUtils.isNotBlank(tester.getBadgeNo()), "请输入工作证编号");
 	}
 
 
 	private void onSaveClick() {
-		if (!isInputValidate()) {
-			Alert alert = new Alert(Alert.AlertType.WARNING);
-			alert.setTitle("Warning");
-			alert.setHeaderText("Please check the input field");
-			alert.show();
-			return;
-		}
-
 		Tester entity = new Tester();
 		for (ColumnEnum key : this.componentMap.keySet()) {
 			Object realValue = null;
@@ -166,6 +160,16 @@ public class TesterAddDialogController {
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
 			}
+		}
+
+		try {
+			checkInputField(entity);
+		} catch (Exception e) {
+			Alert alert = new Alert(Alert.AlertType.WARNING);
+			alert.setTitle("Warning");
+			alert.setHeaderText(e.getMessage());
+			alert.show();
+			return;
 		}
 		this.testerDto = testerService.createTester(entity);
 		this.isSaveBtnClicked = true;
