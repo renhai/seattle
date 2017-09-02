@@ -19,6 +19,6 @@ public class UploadResultDto {
     private List<Integer> failedLineNumbers;
 
     public String toString() {
-        return String.format("成功： %d\n失败：%d\n失败行：%s", successfulCount, failedCount, StringUtils.join(failedLineNumbers), ", ");
+        return String.format("成功：%d\n失败：%d\n失败行：%s", successfulCount, failedCount, StringUtils.join(failedLineNumbers), ", ");
     }
 }

@@ -53,6 +53,9 @@ public class TesterService {
         Sheet sheet = workbook.getSheetAt(0);
 
         Row header = sheet.getRow(0);
+        if (header == null) {
+            return new UploadResultDto();
+        }
         StringBuilder sb = new StringBuilder();
         for (Cell cell : header) {
             sb.append(cell.toString()).append("\t");
